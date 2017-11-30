@@ -15,9 +15,9 @@ namespace DatabaseService
         public List<User> GetUsers()
         {
             List<User> lUsers = new List<User>();
-            string sSqlConnectionString = " ";
+            String sSqlConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
             using (DbConnection oConnection = new SqlConnection(sSqlConnectionString))
-            using (DbCommand oCommand = oConnection.CreateCommand())
+            using (DbCommand oCommand= oConnection.CreateCommand())
             {
                 oCommand.CommandText = "SELECT * FROM users";
                 oConnection.Open();
@@ -34,22 +34,56 @@ namespace DatabaseService
                             sUserLastName = (string)oReader["SURNAME"]
                         });
                     }
-                }               
+                }
             }
             return lUsers;
         }
         public void UpdateUsers(User oUser) // prima objekte usera
         {
-            string sSqlConnectionString = " ";
+            String sSqlConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
             using (DbConnection oConnection = new SqlConnection(sSqlConnectionString))
-            using (DbCommand oCommand = oConnection.CreateCommand()) // kada se izvsi da se oslobodni memorija koju je ta varijabla zauzela
-            {
-                oCommand.CommandText = "UPDATE USERS SET NAME = '" + oUser.sUserFirstName +"', SURNAME = '" + oUser.sUserLastName + "', PASSWORD = '" + oUser.sUserPassword + "' WHERE USER_ID = "+oUser.nUserID;// napravili query
-                oConnection.Open();
-                using (DbDataReader oReader = oCommand.ExecuteReader())
+            { 
+                using (DbCommand oCommand = oConnection.CreateCommand()) // kada se izvsi da se oslobodni memorija koju je ta varijabla zauzela
                 {
+                    oCommand.CommandText = "UPDATE USERS SET NAME = '" + oUser.sUserFirstName + "', SURNAME = '" + oUser.sUserLastName + "', PASSWORD = '" + oUser.sUserPassword + "' WHERE USER_ID = " + oUser.nUserID;// napravili query
+                    oConnection.Open();
+                    using (DbDataReader oReader = oCommand.ExecuteReader())
+                    {
+                    }
                 }
             }
         }
+        public void DeleteUsers(User oUser)
+        {
+            // string sSqlConnectionString = ConfigurationManager.AppSettings["SqlConnectionString"];
+            String sSqlConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+            using (DbConnection oConnection = new SqlConnection(sSqlConnectionString))
+            using (DbCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandText = "DELETE FROM users WHERE USER_ID = " + oUser.nUserID;
+                oConnection.Open();
+                using (DbDataReader oReader = oCommand.ExecuteReader())
+                {
+                    //nema povratne vrijednosti
+                }
+            }
+        }
+
+        public void AddUsers(User oUser)
+        {
+            // string sSqlConnectionString = ConfigurationManager.AppSettings["SqlConnectionString"];
+            String sSqlConnectionString = ConfigurationManager.ConnectionStrings["DbConnection"].ConnectionString;
+            using (DbConnection oConnection = new SqlConnection(sSqlConnectionString))
+            using (DbCommand oCommand = oConnection.CreateCommand())
+            {
+                oCommand.CommandText = "INSERT INTO users (USERNAME, PASSWORD, NAME,SURNAME) VALUES('"+ oUser.sUserName +"', '"+oUser.sUserPassword+"', '"+oUser.sUserFirstName+"', '"+oUser.sUserLastName+"');";
+                oConnection.Open();
+                using (DbDataReader oReader = oCommand.ExecuteReader())
+                {
+                    //nema povratne vrijednosti
+                }
+            }
+        }
+
     }
 }

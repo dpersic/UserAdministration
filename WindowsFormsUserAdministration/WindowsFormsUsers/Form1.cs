@@ -22,13 +22,13 @@ namespace WindowsFormsUsers
 
             // Sluzi za dodavanje kolona
             DataGridViewImageColumn oEditButton = new DataGridViewImageColumn();
-            oEditButton.Image = Image.FromFile("C:/Users/student/Downloads/if_pencil_339877.png");
+            oEditButton.Image = Image.FromFile("C:/Users/student/Downloads/if_Pencil_1021030.png");
             oEditButton.Width = 20;
             oEditButton.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewUsers.Columns.Add(oEditButton);
 
             DataGridViewImageColumn oDeleteButton = new DataGridViewImageColumn();
-            oDeleteButton.Image = Image.FromFile("C:/Users/student/Downloads/if_edit-delete_118920.png");
+            oDeleteButton.Image = Image.FromFile("C:/Users/student/Downloads/if_Streamline-70_185090.png");
             oDeleteButton.Width = 20;
             oDeleteButton.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             dataGridViewUsers.Columns.Add(oDeleteButton);
@@ -51,6 +51,25 @@ namespace WindowsFormsUsers
                 FormEditUser.inptEditSurname.Text = dataGridViewUsers.Rows[e.RowIndex].Cells[4].Value.ToString();
                 FormEditUser.Show();
             }
+
+            if (dataGridViewUsers.CurrentCell.ColumnIndex.Equals(6) && e.RowIndex != -1) // ako mi je moja trenuta celija ( index =5--broj kolone ) i ako index retka nije -1(mora biti index) nesto napravi
+            {
+                DeleteUser FormDeleteUser = new DeleteUser(this);
+                FormDeleteUser.ID = dataGridViewUsers.Rows[e.RowIndex].Cells[0].Value.ToString();
+    
+                FormDeleteUser.Show();
+            }
+        }
+
+        private void izlazToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void btnDodaj_Click(object sender, EventArgs e)
+        {
+            Form4 Form4 = new Form4(this);
+            Form4.Show();
         }
     }
 }
